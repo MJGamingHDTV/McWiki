@@ -3,9 +3,8 @@ package io.github.skylerdev.McWiki;
 /**
  * Holds MCJson properties, and can be applied to MCJson objects.
  * See https://minecraft.gamepedia.com/Commands#Raw_JSON_text for details.
- * 
+ *
  * @author skylerdev
- * 
  */
 public class MCFont {
 
@@ -33,6 +32,7 @@ public class MCFont {
 
     /**
      * Get the prefix to be displayed whenever an MCJson using this type appears.
+     *
      * @return prefix
      */
     public String getPrefix() {
@@ -41,6 +41,7 @@ public class MCFont {
 
     /**
      * Set the prefix to be displayed whenever an MCJson using this type appears.
+     *
      * @param prefix
      */
     public void setPrefix(String prefix) {
@@ -50,6 +51,7 @@ public class MCFont {
 
     /**
      * Get the suffix to be displayed after an MCJson using this font.
+     *
      * @return suffix
      */
     public String getSuffix() {
@@ -58,6 +60,7 @@ public class MCFont {
 
     /**
      * Set the suffix to be displayed after an MCJson using this font.
+     *
      * @param suffix
      */
     public void setSuffix(String suffix) {
@@ -66,6 +69,7 @@ public class MCFont {
 
     /**
      * Get the color to be displayed for an MCJson using this font.
+     *
      * @return color
      */
     public String getColor() {
@@ -74,6 +78,7 @@ public class MCFont {
 
     /**
      * Set the color to be displayed after an MCJson using this font.
+     *
      * @param color (must be valid)
      */
     public void setColor(String color) {
@@ -82,30 +87,34 @@ public class MCFont {
 
     /**
      * Returns this font's bold property.
-     * @return bold 
+     *
+     * @return bold
      */
     public boolean isBold() {
         return bold;
     }
 
-   /**
-    * Sets this font's bold property to be true or false.
-    * @param bold
-    */
+    /**
+     * Sets this font's bold property to be true or false.
+     *
+     * @param bold
+     */
     public void setBold(boolean bold) {
         this.bold = bold;
     }
 
     /**
      * Returns this font's strikethrough property.
-     * @return strikethrough 
+     *
+     * @return strikethrough
      */
     public boolean isStrikethrough() {
         return strikethrough;
     }
-    
+
     /**
      * Sets this font's strikethrough property to be true or false.
+     *
      * @param strikethrough
      */
     public void setStrikethrough(boolean strikethrough) {
@@ -114,7 +123,8 @@ public class MCFont {
 
     /**
      * Returns this font's italic property.
-     * @return italic 
+     *
+     * @return italic
      */
     public boolean isItalic() {
         return italic;
@@ -122,6 +132,7 @@ public class MCFont {
 
     /**
      * Sets this font's italic property to be true or false.
+     *
      * @param italic
      */
     public void setItalic(boolean italic) {
@@ -130,14 +141,16 @@ public class MCFont {
 
     /**
      * Returns this font's underlined property.
-     * @return underlined 
+     *
+     * @return underlined
      */
     public boolean isUnderlined() {
         return underlined;
     }
-    
+
     /**
      * Sets this font's underlined property to be true or false.
+     *
      * @param underlined
      */
     public void setUnderlined(boolean underlined) {
@@ -146,7 +159,8 @@ public class MCFont {
 
     /**
      * Returns this font's bold property.
-     * @return obfuscated 
+     *
+     * @return obfuscated
      */
     public boolean isObfuscated() {
         return obfuscated;
@@ -154,6 +168,7 @@ public class MCFont {
 
     /**
      * Sets this font's obfuscated property to be true or false.
+     *
      * @param obfuscated
      */
     public void setObfuscated(boolean obfuscated) {
@@ -162,6 +177,7 @@ public class MCFont {
 
     /**
      * Gets this clickAction value.
+     *
      * @return clickAction
      */
     public String getClickAction() {
@@ -171,7 +187,8 @@ public class MCFont {
     /**
      * Sets this font's clickaction.
      * Must be one of: open_url, open_file, run_command, change_page, suggest_command
-     * @param valid clickaction 
+     *
+     * @param valid clickaction
      */
     public void setClickAction(String clickAction) {
         this.clickAction = clickAction;
@@ -179,6 +196,7 @@ public class MCFont {
 
     /**
      * Gets this font's click value.
+     *
      * @return clickValue
      */
     public String getClickValue() {
@@ -187,6 +205,7 @@ public class MCFont {
 
     /**
      * Sets this font's bold property to be true or false.
+     *
      * @param bold
      */
     public void setClickValue(String clickValue) {
@@ -195,6 +214,7 @@ public class MCFont {
 
     /**
      * Get this font's hover action string.
+     *
      * @return hoverAction
      */
     public String getHoverAction() {
@@ -203,7 +223,8 @@ public class MCFont {
 
     /**
      * Sets this font's hoverAction.
-     *  Valid values are "show_text" (shows raw JSON text), "show_item" (shows the tooltip of an item which can have NBT tags), and "show_entity" (shows an entity's name, possibly its type, and its UUID).
+     * Valid values are "show_text" (shows raw JSON text), "show_item" (shows the tooltip of an item which can have NBT tags), and "show_entity" (shows an entity's name, possibly its type, and its UUID).
+     *
      * @param hoverAction
      */
     public void setHoverAction(String hoverAction) {
@@ -212,6 +233,7 @@ public class MCFont {
 
     /**
      * Get this font's hoverValue.
+     *
      * @return hoverValue
      */
     public String getHoverValue() {
@@ -220,26 +242,29 @@ public class MCFont {
 
     /**
      * Sets this font's hoverValue property.
-     * @param hoverValue 
+     *
+     * @param hoverValue
      */
     public void setHoverValue(String hoverValue) {
         this.hoverValue = hoverValue;
     }
-    
+
     /**
      * Sets this font's click action and value properties, both of which must be valid.
+     *
      * @param action the clickAction
-     * @param value the clickValue
+     * @param value  the clickValue
      */
     public void setClick(String action, String value) {
         setClickAction(action);
         setClickValue(value);
     }
-    
+
     /**
      * Sets this font's hover action and value properties, both of which must be valid.
+     *
      * @param action the hoverAction
-     * @param value the hoverValue
+     * @param value  the hoverValue
      */
     public void setHover(String action, String value) {
         setHoverAction(action);

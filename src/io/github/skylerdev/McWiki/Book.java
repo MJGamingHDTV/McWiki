@@ -1,8 +1,5 @@
 package io.github.skylerdev.McWiki;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,9 +7,12 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Book objects are wiki pages converted to book format.
- * 
+ *
  * @author skyler
  * @version 2018
  */
@@ -103,11 +103,11 @@ public class Book {
 
                 currentContentEntries++;
                 // Newpage *always* for big headers, except for the first one 
-               if(!currentPage.equals(newPage())) {
-                pages.add(currentPage.toString());
-                currentPage = newPage();
-                currentPageSize = 20;
-               }
+                if (!currentPage.equals(newPage())) {
+                    pages.add(currentPage.toString());
+                    currentPage = newPage();
+                    currentPageSize = 20;
+                }
 
                 String htext = mainchild.text();
                 currentPage.add(new MCJson(htext, header2));
@@ -248,11 +248,9 @@ public class Book {
 
     /**
      * Title page generator for book.
-     * 
-     * @param aTitle
-     *            article title
-     * @param aurl
-     *            article url
+     *
+     * @param aTitle article title
+     * @param aurl   article url
      * @return the JSONArray string of the title page
      */
     public String titlePage(String aTitle, String redirect, String aurl) {
@@ -279,7 +277,7 @@ public class Book {
 
     /**
      * Helper method for buildPages.
-     * 
+     *
      * @returns a default jsonarray
      */
     private JSONArray newPage() {
@@ -290,7 +288,7 @@ public class Book {
 
     /**
      * Back button premade object.
-     * 
+     *
      * @return the back to contents button
      */
     private MCJson backButton() {
@@ -302,14 +300,14 @@ public class Book {
 
     /**
      * Checks if a header is omitted.
-     * 
+     *
      * @param mainchild
      * @return
      */
     private boolean isOmitted(Element mainchild) {
         String text = mainchild.text();
-        String[] omitted = { "Achievements", "Advancements", "Video", "History", "Gallery", "Navigation", "Contents",
-                "Issues", "References", "Data values", "Trivia" };
+        String[] omitted = {"Achievements", "Advancements", "Video", "History", "Gallery", "Navigation", "Contents",
+                "Issues", "References", "Data values", "Trivia"};
         for (int i = 0; i < omitted.length; i++) {
             if (text.contains(omitted[i])) {
                 return true;
@@ -320,7 +318,7 @@ public class Book {
 
     /**
      * End page generator for book.
-     * 
+     *
      * @return the JSONArray string of the ending page
      */
     public String endPage() {

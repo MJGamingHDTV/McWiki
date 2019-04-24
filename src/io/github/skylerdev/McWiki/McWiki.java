@@ -1,15 +1,16 @@
 package io.github.skylerdev.McWiki;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- * McWiki main class. 
+ * McWiki main class.
  * A single instance is created by Spigot at runtime.
- * 
+ *
  * @author skylerdev
  */
 public class McWiki extends JavaPlugin {
@@ -24,12 +25,12 @@ public class McWiki extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        
+
         configHandler = new ConfigHandler(this);
-        
+
         wiki = new CommandWiki(this);
         this.getCommand("wiki").setExecutor(wiki);
-        
+
         LOGGER.log(Level.INFO, "[McWiki] Loaded " + toString() + " successfully.");
 
     }
@@ -52,7 +53,7 @@ public class McWiki extends JavaPlugin {
 
             return true;
         }
-        
+
         return true;
     }
 
@@ -62,10 +63,10 @@ public class McWiki extends JavaPlugin {
         sender.sendMessage("§f/wiki <article>");
         sender.sendMessage("§f/mcwiki <help/reload>");
     }
-    
+
     public ConfigHandler getConfigHandler() {
         return configHandler;
-        
+
     }
 
     public void reload() {

@@ -1,18 +1,11 @@
 package io.github.skylerdev.McWiki;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.json.simple.JSONArray;
@@ -24,9 +17,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
 /**
  * CommandWiki is called whenever a user runs /wiki.
- * 
+ *
  * @author skyler
  * @version 2018
  */
@@ -60,13 +61,13 @@ public class CommandWiki implements CommandExecutor {
         String domain = config.getDomain();
         // If domain is default, then use custom language & default api
         if (domain.equals("minecraft.gamepedia.com") && !lang.equals("en")) {
-            wikiURL = "https://minecraft-" + lang + ".gamepedia.com";   
+            wikiURL = "https://minecraft-" + lang + ".gamepedia.com";
         } else {
             wikiURL = "https://" + domain;
         }
-        
+
         api = wikiURL + "/" + "api.php";
-      
+
 
     }
 
@@ -80,49 +81,50 @@ public class CommandWiki implements CommandExecutor {
             final String article = conjoin(args, "_");
             final String title = conjoin(args, " ");
             final String articleURL = wikiURL + "/index.php?title=" + article;
+            final ConsoleCommandSender consoleSender = Bukkit.getConsoleSender();
 
             asyncFetchArticle(articleURL, title, new DocumentGetCallback() {
                 @Override
                 public void onQueryDone(Document doc) {
                     if (doc == null) {
-                        sender.sendMessage(
+                        consoleSender.sendMessage(
                                 "§cERROR: Null pointer: Fetched successfully, but document returned was null. Check what your last command was and report to github.com/skylerdev");
                         return;
                     }
-             
-                    if(doc.baseUri().startsWith("ERROR404")) {
-                        sender.sendMessage("§cArticle not found. Check the article name and try again.");    
+
+                    if (doc.baseUri().startsWith("ERROR404")) {
+                        sender.sendMessage("§cArticle not found. Check the article name and try again.");
                         return;
                     }
-                    
+
                     if (doc.baseUri().startsWith("ERROR")) {
-                        
-                        switch (doc.baseUri()) {       
-                         case "ERRORIO":
-                            sender.sendMessage("§cERROR: IOException. Double check your config.");
-                            break;
-                        case "ERRORDC":
-                            sender.sendMessage("§eERROR: IOException on retrieval of article (no connection?).  Double check your config. ");
-                            break;
-                        case "ERRORPE":
-                            sender.sendMessage("§cERROR: ParserException: Recieved malformed JSON when trying to retrieve article name.");
-                            break;
-                        case "ERROR404":
-                            sender.sendMessage("§cArticle not found. Check the article name and try again.");
-                            return;
-                        case "ERRORNULLDOC":
-                            sender.sendMessage(
-                                    "§cERROR: Null pointer: Null pointer encountered while trying to fetch document. This... should never happen. Double check your config.");
-                            break;
-                        case "ERRORMF":
-                            sender.sendMessage("§cERROR: Malformed URL. Please check your MCWIKI config and try again.");
-                            break;
-                        case "ERROR999":
-                            sender.sendMessage("§cERROR: No connection to the internet.");
-                            break;
-                        default:
-                            sender.sendMessage("§cFATAL ERROR: HTTP status code " + doc.baseUri().substring(5) + ".");
-                            return;
+
+                        switch (doc.baseUri()) {
+                            case "ERRORIO":
+                                consoleSender.sendMessage("§cERROR: IOException. Double check your config.");
+                                break;
+                            case "ERRORDC":
+                                consoleSender.sendMessage("§eERROR: IOException on retrieval of article (no connection?).  Double check your config. ");
+                                break;
+                            case "ERRORPE":
+                                consoleSender.sendMessage("§cERROR: ParserException: Recieved malformed JSON when trying to retrieve article name.");
+                                break;
+                            case "ERROR404":
+                                consoleSender.sendMessage("§cArticle not found. Check the article name and try again.");
+                                return;
+                            case "ERRORNULLDOC":
+                                consoleSender.sendMessage(
+                                        "§cERROR: Null pointer: Null pointer encountered while trying to fetch document. This... should never happen. Double check your config.");
+                                break;
+                            case "ERRORMF":
+                                consoleSender.sendMessage("§cERROR: Malformed URL. Please check your MCWIKI config and try again.");
+                                break;
+                            case "ERROR999":
+                                consoleSender.sendMessage("§cERROR: No connection to the internet.");
+                                break;
+                            default:
+                                consoleSender.sendMessage("§cFATAL ERROR: HTTP status code " + doc.baseUri().substring(5) + ".");
+                                return;
                         }
                         sendConsole("[McWiki]: error details from last command: " + doc.text());
                         return;
@@ -161,12 +163,9 @@ public class CommandWiki implements CommandExecutor {
 
     /**
      * Fetches the article from the web, asynchronously.
-     * 
-     * @param url
-     *            url of article to fetch.
-     * @param callback
-     *            callback to implement when done fetching.
-     * 
+     *
+     * @param url      url of article to fetch.
+     * @param callback callback to implement when done fetching.
      */
     private void asyncFetchArticle(final String url, final String title, final DocumentGetCallback callback) {
         // async run
@@ -187,7 +186,7 @@ public class CommandWiki implements CommandExecutor {
                     rd.close();
 
                 } catch (final IOException e) {
-                  
+
                     Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("McWiki"), new Runnable() {
                         @Override
                         public void run() {
@@ -196,7 +195,7 @@ public class CommandWiki implements CommandExecutor {
                         }
                     });
                 }
-               
+
                 String newTitle = title;
                 String redirectedFrom = " ";
                 JSONParser parser = new JSONParser();
@@ -217,7 +216,7 @@ public class CommandWiki implements CommandExecutor {
                         newTitle = (String) normalizedActual.get("to");
                     }
                 } catch (final ParseException e) {
-                    
+
                     Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("McWiki"), new Runnable() {
                         @Override
                         public void run() {
@@ -226,27 +225,27 @@ public class CommandWiki implements CommandExecutor {
                     });
 
                 } catch (final NullPointerException e) {
-                    
+
                     Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("McWiki"), new Runnable() {
                         @Override
                         public void run() {
                             callback.onQueryDone(new Document("ERRORNULLDOC").appendText((e.toString())).ownerDocument());
                         }
                     });
-                    
-                } 
+
+                }
 
                 try {
 
                     final Document doc = Jsoup.connect(wikiURL + "/index.php").data("action", "render").data("title", title).get();
                     doc.appendElement("div").attr("id", "redirect").text(redirectedFrom);
                     doc.title(newTitle);
-                    
+
                     Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("McWiki"), new Runnable() {
                         @Override
                         public void run() {
                             callback.onQueryDone(doc);
-                            
+
                         }
                     });
 
@@ -255,9 +254,9 @@ public class CommandWiki implements CommandExecutor {
                     Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("McWiki"), new Runnable() {
                         @Override
                         public void run() {
-                            
+
                             callback.onQueryDone(new Document("ERROR" + e.getStatusCode()));
-                         
+
                         }
                     });
                 } catch (final MalformedURLException e) {
@@ -286,15 +285,15 @@ public class CommandWiki implements CommandExecutor {
     /**
      * Sends message to console.
      */
-      private void sendConsole(String message) {  Bukkit.getConsoleSender().sendMessage(message); }
+    private void sendConsole(String message) {
+        Bukkit.getConsoleSender().sendMessage(message);
+    }
 
     /**
      * Shows book using BookUtil reflection class.
-     * 
-     * @param pages
-     *            The pages of the book to display in List<String>
-     * @param playername
-     *            The name of the player
+     *
+     * @param pages      The pages of the book to display in List<String>
+     * @param playername The name of the player
      */
     private void showBook(List<String> pages, String playername) {
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
@@ -308,12 +307,11 @@ public class CommandWiki implements CommandExecutor {
 
     /**
      * Helper method, joins args to make String.
-     * 
-     * @param String[]
-     *            Array of strings to conjoin with a value
+     *
+     * @param String[] Array of strings to conjoin with a value
      */
     private String conjoin(String[] args, String value) {
-        String a = args[0];
+        String a = args[0].toLowerCase();
         for (int i = 1; i < args.length; i++) {
             a = a + value + args[i];
         }
